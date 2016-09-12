@@ -30,7 +30,7 @@ def gen_id():
     print ("id = ", id)
     return id
 
-
+#- get trading rate from fixer.io
 def get_rate(sell_currency, buy_currency):
     params = urllib.parse.urlencode({'base': sell_currency, 'symbols':buy_currency})
     url = "http://api.fixer.io/latest?%s" % params
@@ -43,7 +43,7 @@ def get_rate(sell_currency, buy_currency):
 def index():
     str(request.remote_addr)
     trades=[]
-    for item in db.Trades.select():
+    for item in db.Trades.select().limit(50):
         trade=[]
         trade.append(item.sell_currency)
         trade.append(item.sell_amount)
@@ -98,5 +98,5 @@ def trade():
     
     
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=int(8000), debug=True)
+    app.run(host="0.0.0.0", port=int(8000), debug=False)
 
