@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<script>
+var frate = function(){
+    var sellc_selects = document.getElementById("sell_currency");
+    var sellc = sellc_selects.options[sellc_selects.selectedIndex].text;
+    var buyc_selects = document.getElementById("buy_currency");
+    var buyc = buyc_selects.options[buyc_selects.selectedIndex].text;
+    var amount = $('#sell_amount').val();
+    if (sellc !="" && buyc !="" && sellc != buyc){
+        $.ajax({
+       
+            url : 'http://api.fixer.io/latest?base='+sellc+'&symbols='+buyc,
+    
+            success : function(data) {
+                $('#rate').val(data.rates[buyc]);
+            },
+            error : function(jqXHR, status, error) {
+                alert('Error getting rates from fixer.io');
+            }
+            
+        });    
+    }
+    if (sellc !="" && buyc !="" && sellc != buyc && amount!=""){
+        $.ajax({
+       
+            url : 'http://api.fixer.io/latest?base='+sellc+'&symbols='+buyc,
+    
+            success : function(data) {
+                $('#rate').val(data.rates[buyc]);
+                famount()
+            },
+            error : function(jqXHR, status, error) {
+                alert('Error getting rates from fixer.io');
+            }
+            
+        });
+    }
+}
+
+var famount = function(){
+    var amount = $('#sell_amount').val();
+    var rate = $('#rate').val();
+    if (rate !=""){
+        $('#buy_amount').val(amount*rate);
+        }
+    console.log(amount);
+}
+    
+        
+</script>
+
+<style>
+    .row{
+        padding-bottom:16px
+        }
+</style>    
+<form action="" method=post> 
+    <div class="row">
+        <div class="col-xs-6 col-sm-4">
+            <label for="sell_currency">Sell Currency</label>
+            <select class="form-control" name="sell_currency" id="sell_currency" pattern="\w+" onchange="frate()">
+                <option></option>
+                <option>AUD</option>
+                <option>BGN</option>
+                <option>BRL</option>
+                <option>CAD</option>
+                <option>CHF</option>
+                <option>CNY</option>
+                <option>CZK</option>
+                <option>DKK</option>
+                <option>GBP</option>
+                <option>HKD</option>
+                <option>HRK</option>
+                <option>HUF</option>
+                <option>IDR</option>
+                <option>ILS</option>
+                <option>INR</option>
+                <option>JPY</option>
+                <option>KRW</option>
+                <option>MXN</option>
+                <option>MYR</option>
+                <option>NOK</option>
+                <option>NZD</option>
+                <option>PHP</option>
+                <option>PLN</option>
+                <option>RON</option>
+                <option>RUB</option>
+                <option>SEK</option>
+                <option>SGD</option>
+                <option>THB</option>
+                <option>TRY</option>
+                <option>USD</option>
+                <option>ZAR</option>
+            </select>
+        </div>
+        
+        <div class="col-xs-6 col-sm-4">
+            <label for="rate">Rate</label>
+            <input type="text" class="form-control" id="rate" required placeholder="Rate" disabled>
+        </div>
+        
+        <div class="col-xs-6 col-sm-4">
+            <label for="buy_currency">Buy Currency</label>
+            <select class="form-control" name="buy_currency" id="buy_currency" onchange="frate()">
+                <option></option>
+                <option>AUD</option>
+                <option>BGN</option>
+                <option>BRL</option>
+                <option>CAD</option>
+                <option>CHF</option>
+                <option>CNY</option>
+                <option>CZK</option>
+                <option>DKK</option>
+                <option>GBP</option>
+                <option>HKD</option>
+                <option>HRK</option>
+                <option>HUF</option>
+                <option>IDR</option>
+                <option>ILS</option>
+                <option>INR</option>
+                <option>JPY</option>
+                <option>KRW</option>
+                <option>MXN</option>
+                <option>MYR</option>
+                <option>NOK</option>
+                <option>NZD</option>
+                <option>PHP</option>
+                <option>PLN</option>
+                <option>RON</option>
+                <option>RUB</option>
+                <option>SEK</option>
+                <option>SGD</option>
+                <option>THB</option>
+                <option>TRY</option>
+                <option>USD</option>
+                <option>ZAR</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-4">
+            <label for="sell_amount">Sell Amount</label>
+            <input type="number" class="form-control" name="sell_amount" required id="sell_amount" onchange="famount()"/>
+
+        </div>
+                
+        <div class="col-xs-6 col-sm-4 col-sm-offset-4">
+            <label for="buy_amount">Buy Amount</label>
+            <input type="text" disabled class="form-control" name="buy_amount" id="buy_amount"/>
+
+
+        </div>        
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-6 col-sm-4">
+
+            <button type="summit" class="btn btn-default">Create</button>
+
+        </div>
+                
+        <div class="col-xs-6 col-sm-4 col-sm-offset-4">
+            <button type="reset" class="btn btn-default">Cancel</button>
+        </div>        
+    </div>
+    
+    
+</form>    
+{% endblock %}

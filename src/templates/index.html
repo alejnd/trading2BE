@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Lasts messages</h2>
+<div class="md-6">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Sell CCY</th>
+                <th>Sell Amount</th>
+                <th>Buy CCY</th>
+                <th>Buy Amount</th>
+                <th>Rate</th>
+                <th>Date Booked</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for list in result %}
+              <tr>
+                {% for item in list %}
+                <td>{{item}}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+{% endblock %}

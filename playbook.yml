@@ -1,0 +1,50 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+#  vars:
+#    mysql_root_password: simple_pass
+#    example_user: example_user
+#    example_user_password: similarly-secure-password
+    
+  tasks:
+#  - name: Add gradle and java8 repo
+#    apt_repository: repo={{ item }}
+#    with_items:
+#    - ppa:cwchien/gradle
+#    - ppa:webupd8team/java
+    
+  - name: update apt cache
+    apt: update_cache=yes
+
+#  - name: Accept Java 8 Licence
+#    shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | tee /etc/oracle-java-8-licence-acceptance | /usr/bin/debconf-set-selections
+#    args:
+#      creates: /etc/oracle-java-8-licence-acceptance
+
+   
+  - name: Install required python version and pip package manager
+    apt: name={{ item }} state=installed
+    with_items:
+    - python3
+    - python3-pip
+
+  - name: Install flask and peewee from pip
+    pip: name={{ item }} executable=pip3 state=latest
+    with_items:
+    - flask
+    - peewee 
+    
+  - name: Creates RESTapi server directory
+    file: path=/home/vagrant/restserver state=directory owner=vagrant
+
+  - name: Synchronize RESTapi server files
+    synchronize: src=src dest=/home/vagrant/restserver
+    
+  - name: Copy restserver service script  
+    copy: src=restserver.conf dest=/etc/init
+    
+  - name: Start restserver
+    action: service name=restserver state=started
+
+    
